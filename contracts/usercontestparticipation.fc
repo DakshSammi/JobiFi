@@ -1,0 +1,38 @@
+// Import the necessary libraries
+#include "stdlib.fc"
+
+// Define the smart contract with initial values
+contract UserRegistrationAndReward {
+    cell resume;       // Store resume data as a reference cell
+    int openToWork;    // Boolean flag for work status (1: Open, 0: Not Open)
+    map(int, int) userData;   // Mapping to store additional user details (e.g., skills, experience)
+    int balance;       // Balance to track rewards for participating in contests
+
+    // Init function for new user registration
+    constructor() {
+        balance = 0;
+    }
+
+    // Function to register a user with resume, open to work status, and other details
+    public() register_user(cell _resume, int _openToWork, map(int, int) _userData) {
+        resume = _resume;
+        openToWork = _openToWork;
+        userData = _userData;
+    }
+
+    // Function to reward user with TON coins for participating in a contest
+    public() reward_user_for_contest(int amount) {
+        require(amount > 0, 101);     // Ensure reward is positive
+        balance += amount;            // Add reward to user balance
+    }
+
+    // Function to withdraw rewards
+    public() withdraw_rewards() {
+        int amount = balance;         // Set amount to current balance
+        balance = 0;                  // Reset balance
+        send_external(amount);        // Send the amount to the user's wallet
+    }
+    
+    // Function placeholder for ExaDrive (outside of FunC, implement ExaDrive API for storage)
+    // ExaDrive functions to store and retrieve data (use API within app code, not smart contract)
+}
